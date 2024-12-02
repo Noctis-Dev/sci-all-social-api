@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from transformers import *
+from transformers import pipeline
 
 from gemini.gemini import get_access_token
 from service import gemini_service

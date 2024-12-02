@@ -1,13 +1,13 @@
-FROM ubuntu:latest
+FROM continuumio/miniconda3
 WORKDIR /app
 
-# Install wine
-RUN dpkg --add-architecture i386 && \
-    apt-get update && \
-    apt-get install -y wine64 wine32
+# Install pkg-config and libmysqlclient-dev
+RUN apt-get update && apt-get install -y pkg-config libmysqlclient-dev
 
-# Copy the .exe file into the container
-COPY dist/main.exe /app/
+COPY environment.yml .
+RUN conda env create -f environment.yml
+SHELL ["conda", "run", "-n", "my_project_env", "/bin/bash", "-c"]
 
-# Run the .exe file using wine
-CMD ["wine", "main.exe"]
+COPY . .
+
+CMD ["conda", "run", "-n", "my_project_env", "python", "main.py"]
